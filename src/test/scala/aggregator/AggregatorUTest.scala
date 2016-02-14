@@ -1,18 +1,20 @@
 package aggregator
 
+import aggregator.domain.Aggregator
+import aggregator.domain.Model.{Money, Transaction, ExchangeRate, Currency}
 import org.scalatest.FunSuite
 
 class AggregatorUTest extends FunSuite {
 
-  implicit val rates: ExchangeRates = Map(
-    ("HUF", "GBP") -> 0.0025,
-    ("GBP", "HUF") -> 399.37
+  implicit val rates: Stream[ExchangeRate] = Stream(
+    ExchangeRate("HUF", "GBP", 0.0025),
+    ExchangeRate("GBP", "HUF", 399.37)
   )
 
-  val source: Iterable[String] = List(
-    "Defence ltd.,HUF,100.5",
-    "Defence ltd.,GBP,50.5",
-    "Plumber ltd.,HUF,515.060"
+  val source: Stream[Transaction] = Stream(
+    Transaction("Defence ltd.", Money(100.5, "HUF")),
+    Transaction("Defence ltd.", Money(50.5, "GBP")),
+    Transaction("Plumber ltd.", Money(515.060, "HUF"))
   )
 
   test("Returns the sum of the transactions per partner") {

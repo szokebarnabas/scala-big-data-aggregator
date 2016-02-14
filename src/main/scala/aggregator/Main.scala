@@ -1,6 +1,9 @@
 package aggregator
 
-import scala.collection.immutable.HashMap
+import aggregator.domain.Aggregator
+import aggregator.domain.Model._
+import aggregator.infrastructure.FileInputReader
+
 import scala.io.Source
 
 object Main extends App {
@@ -8,15 +11,13 @@ object Main extends App {
   val source = Source.fromInputStream(getClass.getResourceAsStream("/transactions.csv"))
   val rates = Source.fromInputStream(getClass.getResourceAsStream("/exchangerates.csv"))
 
-  def tokens(line : String) : (String, String, Double) = {
-    val tokens = line.split(",")
-    (tokens(0), tokens(1), tokens(2).toDouble)
-  }
+  val transactionStream = new FileInputReader(source).stream(Transaction.apply)
+  implicit val exchangeRateStream = new FileInputReader(rates).stream(ExchangeRate.apply)
 
-  implicit val exchangeRates = rates.getLines().map(tokens).foldLeft(new HashMap[(String, String), Double])((map, tuple) => map + ((tuple._1, tuple._2) -> tuple._3))
+  val byPartner = Aggregator.aggregatedByPartner(transactionStream, new Currency("GBP"))
+  val ofPartner = Aggregator.aggregateOfPartner(transactionStream, new Partner("Plumber ltd."), new Currency("GBP"))
 
-  val byPartner = Aggregator.aggregatedByPartner(source.getLines().toIterable, new Currency("GBP"))
-
-  println(byPartner)
+  println(s"By partner: $byPartner")
+  println(s"Of partner Plumber ltd.: $ofPartner")
 }
 

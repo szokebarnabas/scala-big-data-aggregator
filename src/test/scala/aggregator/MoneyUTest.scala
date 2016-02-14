@@ -1,5 +1,6 @@
 package aggregator
 
+import aggregator.domain.Model.{Currency, Money}
 import org.scalatest.FunSuite
 
 class MoneyUTest extends FunSuite {
