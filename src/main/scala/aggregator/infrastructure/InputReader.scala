@@ -8,6 +8,5 @@ trait InputReader[T <: Iterator[_]] {
 }
 
 class FileInputReader(input: Source) extends InputReader[Source] {
-
   override def stream[U](f: (String) => U): Stream[U] = input.getLines().map(f).toStream
 }

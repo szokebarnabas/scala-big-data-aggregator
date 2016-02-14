@@ -12,7 +12,7 @@ object Aggregator {
         case _ => false
       }) match {
         case Some(r) => r.rate
-        case None => throw new RuntimeException(s"Exchange rate not found $money.currency $toCurrency")
+        case None => throw new RuntimeException(s"Exchange rate not found ${money.currency} -> $toCurrency")
       }
       money.exchange(toCurrency, rate)
   }

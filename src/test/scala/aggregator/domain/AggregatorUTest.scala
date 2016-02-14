@@ -1,7 +1,6 @@
-package aggregator
+package aggregator.domain
 
-import aggregator.domain.Aggregator
-import aggregator.domain.Model.{Money, Transaction, ExchangeRate, Currency}
+import aggregator.domain.Model.{Currency, ExchangeRate, Money, Transaction}
 import org.scalatest.FunSuite
 
 class AggregatorUTest extends FunSuite {

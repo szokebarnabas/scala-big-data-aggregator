@@ -1,4 +1,4 @@
-package aggregator
+package aggregator.domain
 
 import aggregator.domain.Model.{Currency, Money}
 import org.scalatest.FunSuite
